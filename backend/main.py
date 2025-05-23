@@ -6,6 +6,11 @@ from PIL import Image
 import numpy as np
 import os
 import uuid
+from pydantic import BaseModel
+import requests
+
+class PredictRequest(BaseModel):
+    image_id: str
 
 app = FastAPI()
 
@@ -48,3 +53,25 @@ def get_image(image_id: str):
     if not os.path.exists(png_path):
         return JSONResponse(status_code=404, content={"error": "Image not found"})
     return FileResponse(png_path, media_type="image/png")
+
+ROBOFLOW_API_URL = "https://detect.roboflow.com/adr/6"  # Replace with your model endpoint
+ROBOFLOW_API_KEY = "xxhcBh2OPo7IA5EEqqqn"    # Replace with your Roboflow API key
+
+@app.post("/predict/")
+def predict(request: PredictRequest):
+    image_id = request.image_id
+    png_path = os.path.join(UPLOAD_DIR, f"{image_id}.png")
+    if not os.path.exists(png_path):
+        return {"error": "Image not found"}
+
+    with open(png_path, "rb") as f:
+        img_bytes = f.read()
+
+    response = requests.post(
+        f"{ROBOFLOW_API_URL}?api_key={ROBOFLOW_API_KEY}",
+        files={"file": img_bytes},
+    )
+    if response.status_code != 200:
+        return {"error": "Roboflow API error", "details": response.text}
+
+    return response.json()

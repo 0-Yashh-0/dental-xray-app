@@ -10,7 +10,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@babel/runtime": "^7.27.1",
+    "babel-runtime": "^6.26.0",
     "react": "^19.1.0",
+    "react-bounding-box": "^0.5.21",
     "react-dom": "^19.1.0"
   },
   "devDependencies": {
