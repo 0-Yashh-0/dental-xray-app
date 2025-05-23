@@ -3,3 +3,7 @@ uvicorn
 pydicom
 pillow
 python-multipart
+requests
+google-generativeai
+python-dotenv
+numpy

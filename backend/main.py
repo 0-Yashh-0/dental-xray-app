@@ -26,10 +26,10 @@ class PredictRequest(BaseModel):
 
 app = FastAPI()
 
-# Allow frontend (React) to access backend
+#frontend access backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173"],  # Vite default port
+    allow_origins=["http://localhost:5173"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -40,23 +40,20 @@ os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @app.post("/upload-dicom/")
 async def upload_dicom(file: UploadFile = File(...)):
-    # Save uploaded DICOM file
     file_id = str(uuid.uuid4())
     dicom_path = os.path.join(UPLOAD_DIR, f"{file_id}.dcm")
     with open(dicom_path, "wb") as f:
         f.write(await file.read())
 
-    # Read and convert DICOM to PNG
     ds = pydicom.dcmread(dicom_path)
     arr = ds.pixel_array
-    # Normalize and convert to uint8
+
     arr = (arr - arr.min()) / (arr.max() - arr.min()) * 255
     arr = arr.astype(np.uint8)
     img = Image.fromarray(arr)
     png_path = os.path.join(UPLOAD_DIR, f"{file_id}.png")
     img.save(png_path)
 
-    # Return PNG path (for testing, in prod use a proper static file server)
     return {"image_id": file_id}
 
 @app.get("/get-image/{image_id}")
@@ -91,11 +88,10 @@ def generate_report(request: ReportRequest):
     if not annotations:
         return {"report": "No pathologies detected in the image."}
 
-    # Prepare prompt
     prompt = (
         "Suppose you are a dental radiologist. Based on the image annotations provided below "
-        "(which include detected pathologies), write a diagnostic report in clinical language. "
-        "Output a brief paragraph highlighting: Detected pathologies, location if possible (e.g., upper left molar), "
+        "(which include detected pathologies), write a brief and concise diagnostic report in clinical language. "
+        "Output a brief paragraph highlighting: Detected pathologies, location in mouth if possible(e.g, left upper molar), "
         "and clinical advice in points.\n\n"
         f"Annotations: {annotations}"
     )

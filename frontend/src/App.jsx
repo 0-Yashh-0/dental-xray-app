@@ -43,6 +43,7 @@ function App() {
   const [predictions, setPredictions] = useState([]);
   const [report, setReport] = useState("");
   const [loading, setLoading] = useState(false);
+  const [hasPredicted, setHasPredicted] = useState(false);
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
@@ -57,6 +58,7 @@ function App() {
     setLoading(true);
     setPredictions([]);
     setReport("");
+    setHasPredicted(false);
     const formData = new FormData();
     formData.append("file", selectedFile);
 
@@ -77,6 +79,7 @@ function App() {
         body: JSON.stringify({ image_id: data.image_id }),
       });
       const predData = await res.json();
+      setHasPredicted(true);
       if (predData.predictions) {
         setPredictions(predData.predictions);
 
@@ -184,8 +187,21 @@ function App() {
           >
             {loading ? (
               <Loader />
-            ) : imageUrl && predictions.length > 0 ? (
-              <AnnotatedImage imageUrl={imageUrl} predictions={predictions} />
+            ) : hasPredicted ? (
+              predictions.length > 0 ? (
+                <AnnotatedImage imageUrl={imageUrl} predictions={predictions} />
+              ) : (
+                <img
+                  src={imageUrl}
+                  alt=""
+                  style={{
+                    width: 400,
+                    height: 400,
+                    objectFit: "contain",
+                    borderRadius: 8,
+                  }}
+                />
+              )
             ) : (
               <span style={{ color: "#888" }}>
                 Analyzed image will appear here
@@ -204,12 +220,14 @@ function App() {
             borderRadius: 8,
             boxShadow: "0 2px 8px rgba(0,0,0,0.07)",
             padding: 32,
-            minHeight: 500,
+            height: 550,
             display: "flex",
             flexDirection: "column",
             alignItems: "flex-start",
-            height: 550,
-          }}
+            overflowY: "auto",
+            wordBreak: "break-word",
+            overflowWrap: "break-word",
+          }}        
         >
           <h2 style={{ marginBottom: 16, color: "#007bff", textAlign: "left" }}>
             Diagnostic Report
