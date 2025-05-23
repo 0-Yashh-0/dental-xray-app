@@ -1,13 +1,25 @@
 from fastapi import FastAPI, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
+from pydantic import BaseModel
 import pydicom
 from PIL import Image
 import numpy as np
-import os
 import uuid
-from pydantic import BaseModel
 import requests
+import google.generativeai as genai
+from dotenv import load_dotenv
+from fastapi import HTTPException
+import os
+
+load_dotenv()
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+ROBOFLOW_API_KEY = os.getenv("ROBOFLOW_API_KEY")
+ROBOFLOW_API_URL = os.getenv("ROBOFLOW_API_URL")
+genai.configure(api_key=GEMINI_API_KEY)
+class ReportRequest(BaseModel):
+    image_id: str
+    annotations: list
 
 class PredictRequest(BaseModel):
     image_id: str
@@ -54,9 +66,6 @@ def get_image(image_id: str):
         return JSONResponse(status_code=404, content={"error": "Image not found"})
     return FileResponse(png_path, media_type="image/png")
 
-ROBOFLOW_API_URL = "https://detect.roboflow.com/adr/6"  # Replace with your model endpoint
-ROBOFLOW_API_KEY = "xxhcBh2OPo7IA5EEqqqn"    # Replace with your Roboflow API key
-
 @app.post("/predict/")
 def predict(request: PredictRequest):
     image_id = request.image_id
@@ -75,3 +84,29 @@ def predict(request: PredictRequest):
         return {"error": "Roboflow API error", "details": response.text}
 
     return response.json()
+
+@app.post("/generate-report/")
+def generate_report(request: ReportRequest):
+    annotations = request.annotations
+    if not annotations:
+        return {"report": "No pathologies detected in the image."}
+
+    # Prepare prompt
+    prompt = (
+        "Suppose you are a dental radiologist. Based on the image annotations provided below "
+        "(which include detected pathologies), write a diagnostic report in clinical language. "
+        "Output a brief paragraph highlighting: Detected pathologies, location if possible (e.g., upper left molar), "
+        "and clinical advice in points.\n\n"
+        f"Annotations: {annotations}"
+    )
+
+    try:
+        model = genai.GenerativeModel("gemini-2.0-flash")
+        response = model.generate_content(prompt)
+        report = response.text.strip()
+    except Exception as e:
+        print("Gemini API error:", e)
+        raise HTTPException(status_code=500, detail=f"Gemini API error: {e}")
+
+
+    return {"report": report}
