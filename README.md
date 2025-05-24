@@ -40,10 +40,10 @@ Cloud: Render (backend), Vercel (frontend)
 bash
 git clone https://github.com/yourusername/dental-xray-app.git
 cd dental-xray-app
+
 2. Set Environment Variables
 
 Backend:
-
 Create backend/.env :
 
 text
@@ -52,7 +52,6 @@ ROBOFLOW_API_KEY=your_roboflow_api_key
 ROBOFLOW_API_URL=https://detect.roboflow.com/your-model/1
 
 Frontend:
-
 Create frontend/.env (not committed to git):
 
 text
