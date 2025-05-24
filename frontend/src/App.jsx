@@ -45,6 +45,8 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [hasPredicted, setHasPredicted] = useState(false);
 
+  const apiUrl = import.meta.env.VITE_API_URL;
+
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
     setPredictions([]);
@@ -63,17 +65,17 @@ function App() {
     formData.append("file", selectedFile);
 
     try {
-      const response = await fetch("http://localhost:8000/upload-dicom/", {
+      const response = await fetch({apiUrl}, {
         method: "POST",
         body: formData,
       });
       const data = await response.json();
       if (!data.image_id) throw new Error("Upload failed");
       setImageId(data.image_id);
-      setImageUrl(`http://localhost:8000/get-image/${data.image_id}`);
+      setImageUrl(`${apiUrl}${data.image_id}`);
 
       // Predict
-      const res = await fetch("http://localhost:8000/predict/", {
+      const res = await fetch({apiUrl}, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image_id: data.image_id }),
@@ -85,7 +87,7 @@ function App() {
 
         // Generate Report
         const reportRes = await fetch(
-          "http://localhost:8000/generate-report/",
+          {apiUrl},
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },

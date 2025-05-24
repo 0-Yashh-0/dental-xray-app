@@ -7,3 +7,4 @@ requests
 google-generativeai
 python-dotenv
 numpy
+pylibjpeg[all]
