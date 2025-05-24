@@ -1,4 +1,5 @@
 🦷 **Dental X-ray AI Dashboard**
+
 A full-stack web application for uploading dental DICOM X-ray images, detecting pathologies using AI (Roboflow), and generating clinical diagnostic reports with Google Gemini LLM.
 Built with FastAPI (Python backend), React + Vite + pnpm (frontend), and fully Dockerized for local development and cloud deployment (Render & Vercel).
 
