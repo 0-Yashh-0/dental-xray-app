@@ -4,6 +4,7 @@ A full-stack web application for uploading dental DICOM X-ray images, detecting 
 Built with FastAPI (Python backend), React + Vite + pnpm (frontend), and fully Dockerized for local development and cloud deployment (Render & Vercel).
 
 🚀 **Features**
+
 DICOM Upload: Upload dental X-ray images (.dcm/.rvg).
 
 AI Pathology Detection: Uses Roboflow API to detect dental pathologies and draw bounding boxes.
@@ -21,6 +22,7 @@ Production Ready: Deployable to Render (backend) and Vercel (frontend).
 Secure: Environment variables managed via .env (never committed).
 
 🖥️ **Tech Stack**
+
 Backend: FastAPI, pydicom, Pillow, requests, google-generativeai, python-dotenv
 
 Frontend: React, Vite, pnpm, react-markdown
@@ -32,12 +34,16 @@ DevOps: Docker, Docker Compose
 Cloud: Render (backend), Vercel (frontend)
 
 🏁 **Local Development** (with Docker)
+
 1. Clone the Repository
+
 bash
 git clone https://github.com/yourusername/dental-xray-app.git
 cd dental-xray-app
 2. Set Environment Variables
+
 Backend:
+
 Create backend/.env :
 
 text
@@ -46,18 +52,22 @@ ROBOFLOW_API_KEY=your_roboflow_api_key
 ROBOFLOW_API_URL=https://detect.roboflow.com/your-model/1
 
 Frontend:
+
 Create frontend/.env (not committed to git):
 
 text
 VITE_API_URL=http://localhost:8000
+
 3. Start the App (Dev Mode)
 bash
 docker compose up --build
+
 Frontend: http://localhost:5173
 
 Backend: http://localhost:8000
 
 🌐 **Production Deployment**
+
 Backend (Render)
 Push backend to GitHub.
 
