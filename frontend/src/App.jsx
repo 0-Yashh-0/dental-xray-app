@@ -65,17 +65,17 @@ function App() {
     formData.append("file", selectedFile);
 
     try {
-      const response = await fetch({apiUrl}, {
+      const response = await fetch(`${apiUrl}/upload-dicom/`, {
         method: "POST",
         body: formData,
       });
       const data = await response.json();
       if (!data.image_id) throw new Error("Upload failed");
       setImageId(data.image_id);
-      setImageUrl(`${apiUrl}${data.image_id}`);
+      setImageUrl(`${apiUrl}/get-image/${data.image_id}`);
 
       // Predict
-      const res = await fetch({apiUrl}, {
+      const res = await fetch(`${apiUrl}/predict/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image_id: data.image_id }),
@@ -87,7 +87,7 @@ function App() {
 
         // Generate Report
         const reportRes = await fetch(
-          {apiUrl},
+          `${apiUrl}/generate-report/`,
           {
             method: "POST",
             headers: { "Content-Type": "application/json" },
