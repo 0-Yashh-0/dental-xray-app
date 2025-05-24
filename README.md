@@ -11,15 +11,11 @@ AI Pathology Detection: Uses Roboflow API to detect dental pathologies and draw 
 
 LLM Diagnostic Report: Generates a clinical report using Google Gemini based on image annotations.
 
-Modern UI: Two-panel dashboard—image viewer (with bounding boxes) and diagnostic report.
-
-Loading Spinners: User feedback during AI processing.
+Simple UI: Two-panel dashboard—image viewer (with bounding boxes) and diagnostic report.
 
 Dockerized: Easy local development and deployment.
 
 Production Ready: Deployable to Render (backend) and Vercel (frontend).
-
-Secure: Environment variables managed via .env (never committed).
 
 🖥️ **Tech Stack**
 
