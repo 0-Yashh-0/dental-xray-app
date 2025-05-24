@@ -29,7 +29,7 @@ app = FastAPI()
 #frontend access backend
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:5173", "https://dobbe-ai.vercel.app/"],
+    allow_origins=["http://localhost:5173", "https://dobbe-ai.vercel.app/", "https://dobbe-ai-yashs-projects-7b97d2b2.vercel.app/", "https://dobbe-ai-git-main-yashs-projects-7b97d2b2.vercel.app/"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

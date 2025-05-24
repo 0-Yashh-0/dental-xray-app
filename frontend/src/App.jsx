@@ -68,7 +68,7 @@ function App() {
       const response = await fetch(`${apiUrl}/upload-dicom/`, {
         method: "POST",
         body: formData,
-      });
+      });      
       const data = await response.json();
       if (!data.image_id) throw new Error("Upload failed");
       setImageId(data.image_id);
@@ -79,24 +79,21 @@ function App() {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image_id: data.image_id }),
-      });
+      });      
       const predData = await res.json();
       setHasPredicted(true);
       if (predData.predictions) {
         setPredictions(predData.predictions);
 
         // Generate Report
-        const reportRes = await fetch(
-          `${apiUrl}/generate-report/`,
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              image_id: data.image_id,
-              annotations: predData.predictions,
-            }),
-          }
-        );
+        const reportRes = await fetch(`${apiUrl}/generate-report/`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            image_id: data.image_id,
+            annotations: predData.predictions,
+          }),
+        });
         const reportData = await reportRes.json();
         setReport(reportData.report || "");
       } else {
