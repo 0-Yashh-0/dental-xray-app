@@ -65,17 +65,17 @@ function App() {
     formData.append("file", selectedFile);
 
     try {
-      const response = await fetch(`${apiUrl}/upload-dicom/`, {
+      const response = await fetch("https://dental-xray-app.onrender.com/upload-dicom/", {
         method: "POST",
         body: formData,
       });      
       const data = await response.json();
       if (!data.image_id) throw new Error("Upload failed");
       setImageId(data.image_id);
-      setImageUrl(`${apiUrl}/get-image/${data.image_id}`);
+      setImageUrl(`https://dental-xray-app.onrender.com/get-image/${data.image_id}`);
 
       // Predict
-      const res = await fetch(`${apiUrl}/predict/`, {
+      const res = await fetch("https://dental-xray-app.onrender.com/predict/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ image_id: data.image_id }),
@@ -86,7 +86,7 @@ function App() {
         setPredictions(predData.predictions);
 
         // Generate Report
-        const reportRes = await fetch(`${apiUrl}/generate-report/`, {
+        const reportRes = await fetch("https://dental-xray-app.onrender.com/generate-report/", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
