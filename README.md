@@ -11,15 +11,11 @@ AI Pathology Detection: Uses Roboflow API to detect dental pathologies and draw 
 
 LLM Diagnostic Report: Generates a clinical report using Google Gemini based on image annotations.
 
-Modern UI: Two-panel dashboard—image viewer (with bounding boxes) and diagnostic report.
-
-Loading Spinners: User feedback during AI processing.
+Simple UI: Two-panel dashboard—image viewer (with bounding boxes) and diagnostic report.
 
 Dockerized: Easy local development and deployment.
 
 Production Ready: Deployable to Render (backend) and Vercel (frontend).
-
-Secure: Environment variables managed via .env (never committed).
 
 🖥️ **Tech Stack**
 
@@ -40,10 +36,10 @@ Cloud: Render (backend), Vercel (frontend)
 bash
 git clone https://github.com/yourusername/dental-xray-app.git
 cd dental-xray-app
+
 2. Set Environment Variables
 
 Backend:
-
 Create backend/.env :
 
 text
@@ -52,7 +48,6 @@ ROBOFLOW_API_KEY=your_roboflow_api_key
 ROBOFLOW_API_URL=https://detect.roboflow.com/your-model/1
 
 Frontend:
-
 Create frontend/.env (not committed to git):
 
 text
