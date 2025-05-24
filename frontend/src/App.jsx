@@ -45,7 +45,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const [hasPredicted, setHasPredicted] = useState(false);
 
-  const apiUrl = import.meta.env.VITE_API_URL;
+  const apiUrl = import.meta.env.production.VITE_API_URL;
 
   const handleFileChange = (e) => {
     setSelectedFile(e.target.files[0]);
